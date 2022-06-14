@@ -1,43 +1,20 @@
-const getUsers = () => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve([
-                { id: 1, name: 'Antonio', gender: 'male', status: 'active', salary: 1000 },
-                { id: 2, name: 'Rosa', gender: 'female', status: 'active', salary: 1000 },
-                { id: 3, name: 'Joseph', gender: 'male', status: 'inactive', salary: 2000 },
-                { id: 4, name: 'Lisa', gender: 'female', status: 'active', salary: 2000 },
-                { id: 5, name: 'Gwen', gender: 'female', status: 'inactive', salary: 3000 },
-                { id: 6, name: 'Antonio', gender: 'male', status: 'inactive', salary: 3000 }
-            ]);
-        }, 1000);
-    });
-}
+const promises = require("./promises.js")
 
-const getCompanies = () => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve([
-                { id: 1, name: 'Disney', employees: [1, 3], status: 'inactive' },
-                { id: 2, name: 'Nestle', employees: [4], status: 'active' },
-                { id: 3, name: 'Microsoft', employees: [2, 5, 6], status: 'active' }
-            ]);
-        }, 3000);
-    });
-}
-
-// 1st Task
+// 1st Part
 async function resolveCompanyEmployeeRelations() {
-    const companies = await getCompanies();
-    const users = await getUsers();
-    return companies.map((company) => {
+    const companies = await promises.getCompanies();
+    const users = await promises.getUsers();
+    const listCompanies = companies.map((company) => {
         return {
             ...company,
             employees: company.employees.map((userId) => users.find((user) => user.id === userId)),
         }
     });
+
+    return listCompanies;
 }
 
-// 2nd Task
+// 2nd Part
 // 2-a
 async function resolveInactiveEmployees() {
     const companiesWithUsers = await resolveCompanyEmployeeRelations();
@@ -45,7 +22,8 @@ async function resolveInactiveEmployees() {
         return company.employees.filter(employee => employee.status === 'inactive')
     });
     const inactiveUsersNames = inactiveUsers.reduce((p,c) => p.concat(c), []).map((employee) => employee.name);
-    return console.log(inactiveUsersNames);
+    
+    return inactiveUsersNames;
 }
 
 // 2-b
@@ -59,13 +37,12 @@ async function resolveSalaryByGender() {
         }
     })
     
-    return console.log(genderSalary);
-    
+    return genderSalary;
 }
 
 
 // 2-c
-async function resolveSortCompanies() {
+async function resolveSortingCompanies() {
     const companiesWithUsers = await resolveCompanyEmployeeRelations();
     const sortCompanySalary = companiesWithUsers.map((company) => {
         return {
@@ -75,10 +52,10 @@ async function resolveSortCompanies() {
     })
     
     const order = sortCompanySalary.sort((a, b) => a.salary - b.salary);
-    return console.log(order.map((data) => data.name));
+    return order.map((data) => data.name);
 }
 
-resolveCompanyEmployeeRelations();
-resolveInactiveEmployees();
-resolveSalaryByGender();
-resolveSortCompanies();
+resolveCompanyEmployeeRelations().then((value) => console.log(value));
+resolveInactiveEmployees().then((value) => console.log(value));
+resolveSalaryByGender().then((value) => console.log(value));
+resolveSortingCompanies().then((value) => console.log(value));
