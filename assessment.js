@@ -54,6 +54,13 @@ async function resolveSortingCompanies() {
     return order.map((data) => data.name);
 }
 
-Promise.all([resolveCompanyEmployeeRelations(), resolveInactiveEmployees(), resolveSalaryByGender(), resolveSortingCompanies()]).then((values) => {
-    console.log(values);
+Promise.all([resolveCompanyEmployeeRelations(), 
+            resolveInactiveEmployees(), 
+            resolveSalaryByGender(), 
+            resolveSortingCompanies()])
+            .then(([act1, act2a, act2b, act2c]) => {
+    console.log("Activity 1\n", act1);
+    console.log("Activity 2-a\n", act2a);
+    console.log("Activity 2-b\n", act2b);
+    console.log("Activity 2-c\n", act2c);
 })
