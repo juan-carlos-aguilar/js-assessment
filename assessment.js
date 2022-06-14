@@ -40,7 +40,6 @@ async function resolveSalaryByGender() {
     return genderSalary;
 }
 
-
 // 2-c
 async function resolveSortingCompanies() {
     const companiesWithUsers = await resolveCompanyEmployeeRelations();
@@ -55,7 +54,6 @@ async function resolveSortingCompanies() {
     return order.map((data) => data.name);
 }
 
-resolveCompanyEmployeeRelations().then((value) => console.log(value));
-resolveInactiveEmployees().then((value) => console.log(value));
-resolveSalaryByGender().then((value) => console.log(value));
-resolveSortingCompanies().then((value) => console.log(value));
+Promise.all([resolveCompanyEmployeeRelations(), resolveInactiveEmployees(), resolveSalaryByGender(), resolveSortingCompanies()]).then((values) => {
+    console.log(values);
+})
